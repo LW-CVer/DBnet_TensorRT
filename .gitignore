@@ -1,0 +1,10 @@
+cmake-build-debug
+cmake-build-release
+.idea
+.vscode
+models
+build
+*.key
+*.drawio
+imgs
+test_img
