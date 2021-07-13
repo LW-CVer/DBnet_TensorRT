@@ -4,7 +4,7 @@
 
 [模型训练代码](https://github.com/BaofengZan/DBNet.pytorch)
 
-[模型地址](https://pan.baidu.com/s/1MYm099HuIbUsG4uub_to9g)
+[模型地址-百度网盘](https://pan.baidu.com/s/1MYm099HuIbUsG4uub_to9g)
 
 提取码：zzl3
 
