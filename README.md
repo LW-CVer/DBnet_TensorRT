@@ -8,6 +8,10 @@
 
 提取码：zzl3
 
+[icdar2015训练的pth模型文件](https://pan.baidu.com/s/1zzjZfKFRfSrbEfvBFV03Ag)
+
+提取码：spv2
+
 # 修改
 
 1.训练代码将上采样层的最邻近插值(nearest)修改为双线性插值(bilinear)
