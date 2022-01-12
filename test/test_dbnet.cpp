@@ -7,7 +7,7 @@
 int main(int argc, char** argv)
 {
     std::string ini_path = "../config/dbnet.ini";
-    std::string wts_path = "../models/dbnet.wts";
+    std::string wts_path = "../models/trt_dbnet.onnx";
     std::string engine_path = "../models/dbnet.engine";
     const char* imgs_path = "../imgs";
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
         auto start = std::chrono::system_clock::now();
         temp = dbnet->detect(image);
         auto end = std::chrono::system_clock::now();
-        /*std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(
                          (end - start))
                          .count()
                   << "ms" << std::endl;
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
             cv::line(src_img, point3, point4, cv::Scalar(0, 0, 255), 2, 8);
             cv::line(src_img, point4, point1, cv::Scalar(0, 0, 255), 2, 8);
         }
-        cv::imwrite("../output/_" + f, src_img);*/
+        cv::imwrite("../outputs/" + f, src_img);
     }
 
     return 0;

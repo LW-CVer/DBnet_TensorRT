@@ -3,6 +3,8 @@
 #include <cuda_runtime_api.h>
 #include <iostream>
 #include "NvInfer.h"
+#include "NvOnnxConfig.h"
+#include "NvOnnxParser.h"
 #include "dbnet_base.hpp"
 #include <chrono>
 #define CHECK(status)                                          \
@@ -58,8 +60,8 @@ class TRTDBnet : public TRTDBnetBase
     TRTDBnet();
     ~TRTDBnet() override;
     int init(const std::string& ini_path) override;
-    int load_model(std::string& wts_file, std::string& engine_file) override;
-    std::vector<TRTDBnetResult> detect(cv::Mat& image) override;
+    int load_model(std::string& onnx_file, std::string& engine_file) override;
+    std::vector<TRTDBnetResult> detect(cv::Mat& image_ori) override;
 
    private:
     nvinfer1::IExecutionContext* m_context;
@@ -83,11 +85,11 @@ class TRTDBnet : public TRTDBnetBase
     int m_min_size;
     float m_expand_ratio;
 
-    nvinfer1::ICudaEngine* createEngine(unsigned int maxBatchSize,
-                                        nvinfer1::IBuilder* builder,
-                                        nvinfer1::IBuilderConfig* config,
-                                        nvinfer1::DataType dt,
-                                        std::string& wts_path);
+    // nvinfer1::ICudaEngine* createEngine(unsigned int maxBatchSize,
+    //                                     nvinfer1::IBuilder* builder,
+    //                                     nvinfer1::IBuilderConfig* config,
+    //                                     nvinfer1::DataType dt,
+    //                                     std::string& wts_path);
     void doInference(float* input, float* output, int h_scale, int w_scale);
 };
 

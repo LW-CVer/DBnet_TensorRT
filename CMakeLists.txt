@@ -11,7 +11,7 @@ message(\n ---${CMAKE_CURRENT_SOURCE_DIR}---)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # opencv相关
 find_package(OpenCV REQUIRED)
-list(APPEND TRTEAST_ALL_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 # cuda相关
 if (NOT DEFINED CUDA_LINK_LIBRARIES_KEYWORD)

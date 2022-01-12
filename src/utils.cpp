@@ -1,6 +1,7 @@
 #include "../include/utils.hpp"
+#include <dirent.h>
+#include <math.h>
 #include "../include/clipper.hpp"
-#include "dirent.h"
 #include "opencv2/opencv.hpp"
 
 bool get_mini_boxes(cv::RotatedRect& rotated_rect, cv::Point2f rect[],
@@ -110,7 +111,7 @@ cv::RotatedRect expandBox(cv::Point2f temp[], float ratio)
                    ClipperLib::EndType::etClosedPolygon);
     ClipperLib::Paths paths;
     offset.Execute(paths, distance);
-    
+
     std::vector<cv::Point> contour;
     for (int i = 0; i < paths[0].size(); i++) {
         contour.emplace_back(paths[0][i].X, paths[0][i].Y);
@@ -123,33 +124,36 @@ void resize_img(cv::Mat& In_Out_img, int shortsize, bool equal_scale)
 {  //按shortsize为基础进行等比例缩放，最小为shortsize
     int w = In_Out_img.cols;
     int h = In_Out_img.rows;
-    float scale = 1.f;
+    float scale = 0;
     if (w < h) {
-        scale = (float)shortsize / w;
-        h = int(scale * h);
+        scale = ((float)shortsize) / w;
+        h = int(std::round(scale * h / 32) * 32);
+        // h = std::round(scale * h);
         w = shortsize;
     } else {
-        scale = (float)shortsize / h;
-        w = int(scale * w);
+        scale = ((float)shortsize) / h;
+        w = int(std::round(scale * w / 32) * 32);
+        // w = std::round(scale * w);
         h = shortsize;
-    }
-
-    if (h % 32 != 0) {
-        h = (h / 32) * 32;
-    }
-    if (w % 32 != 0) {
-        w = (w / 32) * 32;
     }
 
     if (equal_scale) {
         cv::resize(In_Out_img, In_Out_img, cv::Size(shortsize, shortsize));
-    }
-    else{
+    } else {
         cv::resize(In_Out_img, In_Out_img, cv::Size(w, h));
     }
-    
+
     cv::cvtColor(In_Out_img, In_Out_img, cv::COLOR_BGR2RGB);
     In_Out_img.convertTo(In_Out_img, CV_32FC3, 1.0 / 255);
+    std::vector<float> mean_value{0.485, 0.456, 0.406};
+    std::vector<float> std_value{0.229, 0.224, 0.225};
+    std::vector<cv::Mat> rgbChannels(3);
+    cv::split(In_Out_img, rgbChannels);
+    for (auto i = 0; i < rgbChannels.size(); i++) {
+        rgbChannels[i].convertTo(rgbChannels[i], CV_32FC1, 1.0 / std_value[i],
+                                 (0.0 - mean_value[i]) / std_value[i]);
+    }
+    cv::merge(rgbChannels, In_Out_img);
 }
 
 int read_files_in_dir(const char* p_dir_name,
